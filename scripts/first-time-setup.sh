@@ -1,5 +1,9 @@
 #/bin/sh
-TOKEN=$1
+set -e
+
+echo -n Root token: 
+read -s TOKEN
+
 vault auth $TOKEN
 vault auth-enable github
 vault write auth/github/config organization=vimc
