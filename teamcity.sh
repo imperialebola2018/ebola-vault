@@ -5,12 +5,11 @@ git_branch=$(git symbolic-ref --short HEAD)
 registry=docker.montagu.dide.ic.ac.uk:5000
 name=montagu-vault
 
-tag=$registry/$name:$git_id
+commit_tag=$registry/$name:$git_id
+branch_tag=$registry/$name:$git_branch
 
-docker build \
-	-t $tag \
-	-t $registry/$name:$git_branch \
-	.
+docker build -t $commit_tag -t $branch_tag .
 
-echo "Pushing $tag"
-docker push $tag
+set -x
+docker push $commit_tag
+docker push $branch_tag
