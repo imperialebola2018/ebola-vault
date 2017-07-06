@@ -7,6 +7,4 @@ COPY certs/support.montagu.crt /vault/config/ssl_certificate
 WORKDIR /app
 COPY scripts/*.sh ./
 
-# As soon as we have a real SSL certificate we should remove this line
-ENV VAULT_SKIP_VERIFY true
 ENTRYPOINT /app/entrypoint.sh
