@@ -22,4 +22,4 @@ do
 done
 
 echo "Certificate files detected. Running vault"
-vault server
+vault server -config /vault/config/vault.conf
