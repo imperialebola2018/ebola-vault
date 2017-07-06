@@ -6,7 +6,7 @@ echo "loopback device, you have no guarantee you are not connecting to an "
 echo "attacker."
 
 ./include/start-vault.sh
-docker cp vault-insecure.conf montagu-vault:/vault/config/vault.conf
+docker cp vault-no-ssl.conf montagu-vault:/vault/config/vault.conf
 docker exec montagu-vault touch /vault/config/go_signal
 
 cat include/start-text.txt
