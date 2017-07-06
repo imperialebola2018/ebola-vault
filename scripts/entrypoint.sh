@@ -4,22 +4,14 @@ set -e
 root="/vault/config"
 mkdir -p $root
 
-a="$root/certificate.pem"
-b="$root/ssl_key.pem"
+f="$root/go_signal"
 
-echo "Waiting for SSL certificate files at:"
-echo "- $a"
-echo "- $b"
+echo "Waiting for signal file at $f"
 
-while [ ! -e $a ]
+while [ ! -e $f ]
 do
     sleep 2
 done
 
-while [ ! -e $b ]
-do
-    sleep 2
-done
-
-echo "Certificate files detected. Running vault"
+echo "Go signal detected. Running vault"
 vault server -config /vault/config/vault.conf
