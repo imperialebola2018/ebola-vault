@@ -1,7 +1,7 @@
 #/bin/sh
 set -e
 
-echo -n Root token: 
+echo -n "Root token: "
 read -s TOKEN
 
 vault auth $TOKEN
