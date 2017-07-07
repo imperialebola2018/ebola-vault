@@ -86,3 +86,19 @@ Alternative approaches to consider:
    if the support machines dies. Imperial seem to be able to create them pretty
    fast.
 2. Backup the SSL key directly with our backup provider.
+
+## Interaction with the registry
+In my first take on this I followed the pattern of other Montagu components:
+build a Docker image in TeamCity, push it to the registry, and then `run.sh`
+just pulled the image down and ran it.
+
+However, thinking it through I realized that we want to store the registry
+SSL key in the Vault. So then we'd have a chicken and egg situation, where
+we can't spin up the registry without the vault, and we can't run the vault
+without pulling it from the registry.
+
+The simple solution was just to move building the docker image into the
+run script - it's a oneliner, and you need the full repository and Docker
+to run anyway. TeamCity still builds an image, as that's a useful way of
+checking that this works, and in some test cases it may be convenient to
+pull down a built image from the registry.
