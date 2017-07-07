@@ -2,7 +2,34 @@
 [Vault](https://www.vaultproject.io/) is a piece of softeware for storing 
 secrets. They have an official [docker image](https://hub.docker.com/_/vault/).
 
-## Repository contents
+## Using the vault
+### Authenticating against the vault
+1. `export VAULT_ADDR='https://support.montagu.dide.ic.ac.uk:8200'`
+2. `export VAULT_AUTH_GITHUB_TOKEN=<personal access token>`. To generate a 
+   personal access token, go to GitHub > Settings > Personal Access Tokens. The
+   new token must have the 'user' scope.
+3. `vault auth -method=github`
+
+### Reading secrets
+```
+vault read secret/some/path
+```
+
+### Unsealing the vault
+The vault is stored on disk at `/vault/storage` on the support machine. However,
+it is encrypted on disk. Any time the Vault restarts (or is restored from 
+backup) we have to provide enough unseal keys to allow it to decrypt the 
+contents in memory.
+
+Each keyholder up to the required number must run on their machine:
+
+1. `export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200`
+2. `vault unseal` (you will be prompted for your unseal key)
+
+This shouldn't happen often.
+
+## Setting up the vault
+### Repository contents
 This repository contains:
 
 * Files for extending the base docker image with our own configuration:
@@ -23,7 +50,7 @@ This repository contains:
     - `scripts/init.sh`
     - `scripts/first-time-setup.sh`
 
-## How to create a brand new Vault
+### How to create a brand new Vault
 Since we hopefully won't do this again, this is more documentation of what 
 Martin did to get us here:
 
@@ -41,20 +68,7 @@ Martin did to get us here:
 1. Everyone unseals the vault (see below).
 1. `./first-time-setup.sh` (Still inside the vault container).
 
-## Unsealing the vault
-The vault is stored on disk at `/vault/storage` on the support machine. However,
-it is encrypted on disk. Any time the Vault restarts (or is restored from 
-backup) we have to provide enough unseal keys to allow it to decrypt the 
-contents in memory.
-
-Each keyholder up to the required number must run on their machine:
-
-1. `export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200`
-2. `vault unseal` (you will be prompted for your unseal key)
-
-This shouldn't happen often.
-
-## Restoring the Vault from backup
+### Restoring the Vault from backup
 Let's imagine that the support machine has died and we need to set up a new one.
 This is a bit ticklish because we can't secure access to the vault with the 
 private SSL key, but we store this in the vault. It's okay though: We can 
@@ -87,7 +101,7 @@ Alternative approaches to consider:
    fast.
 2. Backup the SSL key directly with our backup provider.
 
-## Interaction with the registry
+### Interaction with the registry
 In my first take on this I followed the pattern of other Montagu components:
 build a Docker image in TeamCity, push it to the registry, and then `run.sh`
 just pulled the image down and ran it.
