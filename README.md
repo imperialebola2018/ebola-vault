@@ -70,7 +70,7 @@ Martin did to get us here:
 
 ### Restoring the Vault from backup
 Let's imagine that the support machine has died and we need to set up a new one.
-This is a bit ticklish because we can't secure access to the vault with the 
+This is a bit ticklish because we can't secure access to the vault without the 
 private SSL key, but we store this in the vault. It's okay though: We can 
 bootstrap by accessing the vault locally, from inside the Docker container, get
 the key out, and then restart with SSL.
