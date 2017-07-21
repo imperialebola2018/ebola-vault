@@ -75,8 +75,8 @@ private SSL key, but we store this in the vault. It's okay though: We can
 bootstrap by accessing the vault locally, from inside the Docker container, get
 the key out, and then restart with SSL.
 
-1. Obtain the vault's encrypted storage from our backup provider and place it at
-   `/vault/storage`.
+1. Follow the restore instructions in the 
+   [Disaster Recovery guide](https://github.com/vimc/montagu/docs/DisasterRecovery.md)
 1. `./run-no-ssl.sh`
 1. Each keyholder must unseal the Vault over a localhost connect, like so:
     1. `ssh support.montagu.dide.ic.ac.uk`
