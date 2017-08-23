@@ -85,7 +85,7 @@ the key out, and then restart with SSL.
     4. `vault unseal` (you will be prompted for your unseal key)
 1. Get the private SSL key. From within the container, run
     1. `vault auth -method=github [GITHUB PERSONAL ACCESS TOKEN]`
-    2. `vault read -field=support secret/ssl` > ssl_key
+    2. `vault read -field=key secret/ssl/support` > ssl_key
     3. Then outside the container run `docker cp montagu-vault:/app/ssl_key .`
 1. Now restart the vault with SSL:
     1. `docker stop montagu-vault`
