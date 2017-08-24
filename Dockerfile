@@ -2,7 +2,6 @@ FROM vault:0.7.3
 
 COPY vault.conf /vault/config/
 COPY standard.policy /vault/config/
-COPY dbread.policy /vault/config/
 
 COPY certs/support.montagu.crt /vault/config/
 COPY certs/QuoVadisOVIntermediateCertificate.crt /vault/config/
