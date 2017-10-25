@@ -21,10 +21,11 @@ machine is rebooted), follow these steps:
 
 1. Begin a session on the support machine.
 2. Clone this respository: `git clone https://github.com/vimc/montagu-vault.git`
-3. `sudo cp  ./run.sh /etc/montagu/vault_ssl_key` (You need root to read the SSL
+3. `cd montagu-vault`
+4. `sudo ./run.sh /etc/montagu/vault_ssl_key` (You need root to read the SSL
    key, not actually to run the vault)
-4. End your remote session.
-4. Collaborate with keyholders to unseal the vault, as described in the next
+5. End your remote session.
+6. Collaborate with keyholders to unseal the vault, as described in the next
    section.
 
 ### Unsealing the vault
