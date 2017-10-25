@@ -15,6 +15,18 @@ secrets. They have an official [docker image](https://hub.docker.com/_/vault/).
 vault read secret/some/path
 ```
 
+### Restarting the vault
+If the Vault docker container is stopped (for example, because the support 
+machine is rebooted), follow these steps:
+
+1. Begin a session on the support machine.
+2. Clone this respository: `git clone https://github.com/vimc/montagu-vault.git`
+3. `sudo cp  ./run.sh /etc/montagu/vault_ssl_key` (You need root to read the SSL
+   key, not actually to run the vault)
+4. End your remote session.
+4. Collaborate with keyholders to unseal the vault, as described in the next
+   section.
+
 ### Unsealing the vault
 The vault is stored on disk at `/vault/storage` on the support machine. However,
 it is encrypted on disk. Any time the Vault restarts (or is restored from 
@@ -75,6 +87,8 @@ private SSL key, but we store this in the vault. It's okay though: We can
 bootstrap by accessing the vault locally, from inside the Docker container, get
 the key out, and then restart with SSL.
 
+If the support machine hasn't died
+
 1. Follow the restore instructions in the 
    [Disaster Recovery guide](https://github.com/vimc/montagu/docs/DisasterRecovery.md)
 1. `./run-no-ssl.sh`
@@ -85,12 +99,17 @@ the key out, and then restart with SSL.
     4. `vault unseal` (you will be prompted for your unseal key)
 1. Get the private SSL key. From within the container, run
     1. `vault auth -method=github [GITHUB PERSONAL ACCESS TOKEN]`
-    2. `vault read -field=key secret/ssl/support` > ssl_key
+    2. `vault read -field=key secret/ssl/support > ssl_key`
     3. Then outside the container run `docker cp montagu-vault:/app/ssl_key .`
+    4. Secure the key:
+       ```
+       chmod 600 ssl_key
+       sudo chown root:root ssl_key 
+       sudo mv ssl_key /etc/montagu/vault_ssl_key
+       ```
 1. Now restart the vault with SSL:
     1. `docker stop montagu-vault`
-    2. `./run.sh ssl_key`
-    3. `rm ssl_key`
+    2. `sudo ./run.sh /etc/montagu/vault_ssl_key`
 1. Finally, go through the normal, remote unseal process, as described in 
    "Unsealing the vault".
 
