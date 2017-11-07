@@ -1,0 +1,4 @@
+# Allow read only access to database passwords on science
+path "secret/database/science" {
+    policy = "read"
+}
