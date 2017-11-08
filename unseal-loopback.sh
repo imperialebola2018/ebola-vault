@@ -13,10 +13,10 @@ VAULT_STATUS=$?
 # this command should only be used when we have a vault running http:
 if [ $VAULT_STATUS -eq 0 ]; then
     echo "Vault appears to be running OK"
-    # exit 1
+    exit 1
 elif [ $VAULT_STATUS -eq 2 ]; then
     echo "Vault is running with https but needs unsealing"
-    # exit 1
+    exit 1
 fi
 
 # Then make sure that the vault is unsealed - we need to pull things
@@ -26,7 +26,7 @@ VAULT_STATUS=$?
 
 if [ $VAULT_STATUS -eq 0 ]; then
     echo "Vault not sealed - no need to unseal"
-    # exit 1
+    exit 1
 fi
 
 docker exec -e VAULT_ADDR=$VAULT_ADDR_HTTP -it montagu-vault vault unseal
