@@ -52,7 +52,7 @@ set -e
 
 echo "Retrieving ssl key"
 docker exec -it -e VAULT_ADDR=$VAULT_ADDR_HTTP -e VAULT_AUTH_GITHUB_TOKEN=$VAULT_AUTH_GITHUB_TOKEN montagu-vault vault auth -method=github
-docker exec -it -e VAULT_ADDR=$VAULT_ADDR_HTTP montagu-vault vault read -field=key secret/ssl/supporti > $SSL_KEY_PATH
+docker exec -it -e VAULT_ADDR=$VAULT_ADDR_HTTP montagu-vault vault read -field=key secret/ssl/support > $SSL_KEY_PATH
 
 # Secure the token
 chmod 600 $SSL_KEY_PATH
