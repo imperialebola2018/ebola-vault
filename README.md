@@ -136,3 +136,19 @@ run script - it's a oneliner, and you need the full repository and Docker
 to run anyway. TeamCity still builds an image, as that's a useful way of
 checking that this works, and in some test cases it may be convenient to
 pull down a built image from the registry.
+
+### Applying changes
+
+Changes to the vault are stored in [`changes`](changes).  These will typically interact with things outside of `/secret` and need elevated vault privledges.  We need to do this properly at some point with issuing temporary root tokens, but for now:
+
+```
+vault auth
+```
+
+pasting in the root token as needed.  When you are done, do
+
+```
+vault auth -method=github
+```
+
+to revert to normal permissions.
