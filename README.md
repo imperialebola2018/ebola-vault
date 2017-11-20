@@ -95,8 +95,8 @@ If the support machine hasn't died
 1. `./run-no-ssl.sh`
 1. Each keyholder must unseal the Vault over a localhost connect, like so:
     1. `ssh support.montagu.dide.ic.ac.uk`
-    2. `./unseal-loopback.sh` (you will be prompted for your unseal key)
-1. Get the private SSL key. From within the container, run
+    2. `./unseal-loopback.sh` (you will be prompted for your unseal key) - at least two people must do this step
+1. With the vault up, but only secure over the loopback devices, restart the vault with ssl enabled using the ssl key is itself stored in the vault
     1. `ssh support.montagu.dide.ic.ac.uk`
     2. `./restart-with-ssl.sh`
 1. Finally, go through the normal, remote unseal process, as described in 
