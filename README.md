@@ -91,7 +91,7 @@ the key out, and then restart with SSL.
 If the support machine hasn't died
 
 1. Follow the restore instructions in the 
-   [Disaster Recovery guide](https://github.com/vimc/montagu/docs/DisasterRecovery.md)
+   [Disaster Recovery guide](https://github.com/vimc/montagu/tree/master/docs/DisasterRecovery.md)
 2. `./run-no-ssl.sh`
 3. Each keyholder must unseal the Vault over a localhost connect, like so:
     1. `ssh support.montagu.dide.ic.ac.uk`
