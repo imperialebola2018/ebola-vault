@@ -92,26 +92,14 @@ If the support machine hasn't died
 
 1. Follow the restore instructions in the 
    [Disaster Recovery guide](https://github.com/vimc/montagu/docs/DisasterRecovery.md)
-1. `./run-no-ssl.sh`
-1. Each keyholder must unseal the Vault over a localhost connect, like so:
+2. `./run-no-ssl.sh`
+3. Each keyholder must unseal the Vault over a localhost connect, like so:
     1. `ssh support.montagu.dide.ic.ac.uk`
-    2. `docker exec -it montagu-vault /bin/sh`
-    3. `export VAULT_ADDR='http://127.0.0.1:8200'`
-    4. `vault unseal` (you will be prompted for your unseal key)
-1. Get the private SSL key. From within the container, run
-    1. `vault auth -method=github [GITHUB PERSONAL ACCESS TOKEN]`
-    2. `vault read -field=key secret/ssl/support > ssl_key`
-    3. Then outside the container run `docker cp montagu-vault:/app/ssl_key .`
-    4. Secure the key:
-       ```
-       chmod 600 ssl_key
-       sudo chown root:root ssl_key 
-       sudo mv ssl_key /etc/montagu/vault_ssl_key
-       ```
-1. Now restart the vault with SSL:
-    1. `docker stop montagu-vault`
-    2. `sudo ./run.sh /etc/montagu/vault_ssl_key`
-1. Finally, go through the normal, remote unseal process, as described in 
+    2. `./unseal-loopback.sh` (you will be prompted for your unseal key) - at least two people must do this step
+4. With the vault up, but only secure over the loopback devices, restart the vault with ssl enabled using the ssl key is itself stored in the vault
+    1. `ssh support.montagu.dide.ic.ac.uk`
+    2. `./restart-with-ssl.sh`
+5. Finally, go through the normal, remote unseal process, as described in
    "Unsealing the vault".
 
 Alternative approaches to consider:
