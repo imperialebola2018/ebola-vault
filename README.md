@@ -1,8 +1,9 @@
 # Montagu secrets vault 
-[Vault](https://www.vaultproject.io/) is a piece of softeware for storing 
-secrets. They have an official [docker image](https://hub.docker.com/_/vault/).
+
+[Vault](https://www.vaultproject.io/) is a piece of software for storing secrets. They have an official [docker image](https://hub.docker.com/_/vault/).
 
 ## Using the vault
+
 ### Authenticating against the vault
 1. `export VAULT_ADDR='https://support.montagu.dide.ic.ac.uk:8200'`
 2. `export VAULT_AUTH_GITHUB_TOKEN=<personal access token>`. To generate a 
@@ -11,6 +12,7 @@ secrets. They have an official [docker image](https://hub.docker.com/_/vault/).
 3. `vault auth -method=github`
 
 ### Reading secrets
+
 ```
 vault read secret/some/path
 ```
@@ -30,6 +32,8 @@ machine is rebooted), follow these steps:
    section.
 
 The process for restoring the vault from backup is identical.  If you have been following the [Disaster Recovery guide](https://github.com/vimc/montagu/tree/master/docs/DisasterRecovery.md) then the vault volume will be ready to use.
+
+The tricky bit in this process is getting the ssl certificate private key into the vault container.  This is documented in more detail [here](ssl-key/README.md) but if you follow the instructions above things should work.  See the [ssl-key instructions](ssl-key/README.md) if you need to add a new ssh-key or replace the ssl certificate.
 
 ### Unsealing the vault
 

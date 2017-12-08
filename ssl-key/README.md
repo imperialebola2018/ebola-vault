@@ -15,7 +15,19 @@ Then do decrypt:
 
 A multi-key approach like [this](https://gist.github.com/kennwhite/9918739) seems nice but I _really_ don't want to encourage us to be copying around our private keys!  So with this scheme we locally (i.e., on our host machines) decrypt the symmetric key and then we provide that interactively during vault startup.
 
-## To add a new key
+## To add a new public key
+
+(e.g., if you rebuild your computer and add a new key, a new person joins the project, etc).
 
 * Copy the ssh **public** key - `~/.ssh/id_rsa.pub` - into `pubkey/` with a descriptive name, and commit to git
 * Run the script `./ssl-key/encrypt.sh` which will create a new set of encrypted keys
+* Run `git add ssl-key/pub ssl-key/key` to add the public key and encrypted symmetric key, commit and push.  There is no need to redeploy the vault.
+
+## To replace the ssl certificate private key
+
+* Copy the public parts of the certificate into `certs/`
+* Copy the new certificate private key to `~/ssl-key/ssl_private_key`
+* Run the script `./ssl-key/encrypt.sh`
+* Remove `ssl-key/ssl_private_key`
+* Run `git add ssl-key/key ssl-key/ssl_private_key.enc`, then commit and push
+* Redeploy vault
