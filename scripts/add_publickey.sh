@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# This script is run on everyone's individual computers.  After it has
+# been run we can reencrypt the key with this public key added to it.
+
 set -e
 if [ "$#" -ne 1 ]; then
     echo "Usage:\n    $0 <name>"
@@ -6,12 +10,11 @@ if [ "$#" -ne 1 ]; then
 fi
 
 NAME=$1
-DEST="pubkey/ssl/${NAME}.pub"
+DEST="pubkey/${NAME}.pub"
 SRC=~/.ssh/id_rsa
-
 echo "Converting ssh key $SRC into public key $DEST"
 
-mkdir -p pubkey/ssl
+mkdir -p pubkey
 openssl req -x509 -new -key $SRC -days 3650 -nodes \
         -subj "/C=US/ST=*/L=*/O=*/OU=*/CN=Carol/" -out $DEST
 
