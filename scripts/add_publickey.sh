@@ -7,7 +7,7 @@ fi
 
 NAME=$1
 DEST="pubkey/ssl/${NAME}.pub"
-SRC=$(readlink -f ~/.ssh/id_rsa)
+SRC=~/.ssh/id_rsa
 
 echo "Converting ssh key $SRC into public key $DEST"
 
