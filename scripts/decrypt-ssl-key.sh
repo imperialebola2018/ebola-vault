@@ -6,8 +6,8 @@ echo "On your PC, in montagu-vault, run"
 echo
 echo "  ./ssl-key/decrypt-key.sh <your-key-name>"
 echo
-echo "where <your-key-name> corresponds to an entry in keys/ that you"
-echo "have the private key for"
+echo "where <your-key-name> corresponds to an entry in ssl-keys/pubkeys/"
+echo "that you have the private key for."
 echo
 echo "Then copy the printed symmetric key: "
 echo -n "key: "
