@@ -2,7 +2,7 @@
 set -e
 
 ./include/start-vault.sh
-docker exec -it montagu-vault ./decrypt_ssl_key.sh
+docker exec -it montagu-vault ./decrypt-ssl-key.sh
 
 cat include/start-text.txt
 
