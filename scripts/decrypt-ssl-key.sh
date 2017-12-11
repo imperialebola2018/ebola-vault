@@ -7,7 +7,7 @@ echo
 echo "  git clone https://github.com/vimc/montagu-vault"
 echo "  ./montagu-vault/ssl-key/decrypt-key.sh <your-key-name>"
 echo
-echo "where <your-key-name> corresponds to an entry in ssl-keys/pubkeys/"
+echo "where <your-key-name> corresponds to an entry in ssl-key/pubkey/"
 echo "that you have the private key for.  If you can't remember, run the"
 echo "decrypt-key command with no arguments and it will print value names."
 echo
