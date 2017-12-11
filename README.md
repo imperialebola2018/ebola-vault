@@ -40,9 +40,9 @@ The tricky bit in this process is getting the ssl certificate private key into t
 You will need a copy of the vault's (encrypted) storage which can be retrieved by running, within a fresh checkout of this repository:
 
 ```
-ssh -t support.montagu sudo tar -zcvf  ~/storage.tar.gz -C /montagu/vault storage
+ssh -t support.montagu sudo tar -zcvf ~/storage.tar.gz /montagu/vault/storage
 scp support.montagu:storage.tar.gz .
-tar -zxvf storage.tar.gz
+sudo tar -zxvf storage.tar.gz -C /
 ssh support.montagu rm ~/storage.tar.gz
 rm storage.tar.gz
 ```
@@ -99,25 +99,24 @@ This repository contains:
     - `scripts/init.sh`
     - `scripts/first-time-setup.sh`
 
-### How to create a brand new Vault
+### How we initially created the vault
 
 Since we hopefully won't do this again, this is more documentation of what 
-Martin did to get us here:
+Martin did to get us here (adapted to use the new ssl key handling)
 
 1. Begin a session on the support machine.
-1. `./run.sh SSL_PRIVATE_KEY_PATH` 
-1. `docker exec -it montagu-vault /bin/sh`
-1. `export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200`. This is
-   because the SSL certificate is signed for that URL, not for 127.0.0.1,
-   which Vault defaults to.
-1. `./init.sh`: This generates four new unseal keys, and one root token.
-   Copy these these onto a USB key as individual files.
+1. Ensure that `/montagu/vault/storage` is empty or does not exist
+1. `./run.sh`
+
+The following commands can then be run from any computer on the VPN
+
+1. export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200
+1. Run `vault init -key-shares=4 -key-threshold=2`: This generates four new unseal keys, and one root token. Copy these these onto a USB key as individual files.
 1. The unseal keys and root token are then distributed to each of the four
    keyholders (Martin, Wes, Alex, Rich), so that each gets one unseal key
     and everyone has the root access token.
-1. Everyone unseals the vault (see below).
-1. `./first-time-setup.sh` (Still inside the vault container).
-
+1. Everyone unseals the vault using `vault unseal` (see above).
+1. `./init/first-time-setup.sh`
 
 ### Interaction with the registry
 
