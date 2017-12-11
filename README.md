@@ -17,10 +17,10 @@
 vault read secret/some/path
 ```
 
-### Restarting the vault
+### Restarting and/or restoring the vault
 
 If the Vault docker container is stopped (for example, because the support 
-machine is rebooted), follow these steps:
+machine is rebooted, or because you are restoring from backup), follow these steps:
 
 1. Begin a session on the support machine.
 2. Clone this respository: `git clone https://github.com/vimc/montagu-vault.git`
@@ -34,6 +34,29 @@ machine is rebooted), follow these steps:
 The process for restoring the vault from backup is identical.  If you have been following the [Disaster Recovery guide](https://github.com/vimc/montagu/tree/master/docs/DisasterRecovery.md) then the vault volume will be ready to use.
 
 The tricky bit in this process is getting the ssl certificate private key into the vault container.  This is documented in more detail [here](ssl-key/README.md) but if you follow the instructions above things should work.  See the [ssl-key instructions](ssl-key/README.md) if you need to add a new ssh-key or replace the ssl certificate.
+
+#### Testing the restore locally
+
+You will need a copy of the vault's (encrypted) storage which can be retrieved by running:
+
+```
+ssh -t support.montagu sudo tar -zcvf  ~/storage.tar.gz -C /montagu/vault storage
+scp support.montagu:storage.tar.gz .
+tar -zxvf storage.tar.gz
+ssh support.montagu rm ~/storage.tar.gz
+```
+
+Then, in order to simulate access to the vault over https, add the following line to `/etc/hosts`:
+
+```
+127.0.0.1 support.montagu.dide.ic.ac.uk support
+```
+
+Verify with `ping support.montagu.dide.ic.ac.uk` which should then print `64 bytes from localhost (127.0.0.1): ...`
+
+At this point you can now run `./run.sh` to test the restore process
+
+**Do not forget to remove the line from `/etc/hosts` when you're done**.  Otherwise all sorts of things will fail (registry, future vault access, etc).
 
 ### Unsealing the vault
 
