@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -e
 NAME=$1
-PATH_KEY="ssl-key/key"
+HERE=$(dirname $0)
+PATH_KEY="$HERE/../ssl-key/key"
 FILE_KEY="$PATH_KEY/$NAME"
 FILE_PRIVKEY=$HOME/.ssh/id_rsa
 
