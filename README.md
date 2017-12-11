@@ -47,6 +47,8 @@ ssh support.montagu rm ~/storage.tar.gz
 rm storage.tar.gz
 ```
 
+(Before running those commands you probably want to ensure that `/montagu/vault/storage` is empty or does not exist)
+
 Then, in order to simulate access to the vault over https, add the following line to `/etc/hosts`:
 
 ```
