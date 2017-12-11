@@ -2,12 +2,14 @@
 set -e
 FILE_ENC=/vault/config/ssl_private_key.enc
 FILE_CLEAR=/vault/config/ssl_private_key
-echo "On your PC, in montagu-vault, run"
+echo "On your PC, run"
 echo
-echo "  ./ssl-key/decrypt-key.sh <your-key-name>"
+echo "  git clone https://github.com/vimc/montagu-vault"
+echo "  ./montagu-vault/ssl-key/decrypt-key.sh <your-key-name>"
 echo
 echo "where <your-key-name> corresponds to an entry in ssl-keys/pubkeys/"
-echo "that you have the private key for."
+echo "that you have the private key for.  If you can't remember, run the"
+echo "decrypt-key command with no arguments and it will print value names."
 echo
 echo "Then copy the printed symmetric key: "
 echo -n "key: "
