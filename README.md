@@ -96,8 +96,8 @@ This repository contains:
 * Scripts to be run to set up a brand new Vault (we shouldn't need these again)
   unless we suffer a catastrophic backup failure and have to generate new 
   secrets):
-    - `scripts/init.sh`
-    - `scripts/first-time-setup.sh`
+    - `init/init.sh`
+    - `init/first-time-setup.sh`
 
 ### How we initially created the vault
 
