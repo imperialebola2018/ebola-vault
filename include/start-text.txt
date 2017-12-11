@@ -5,9 +5,9 @@ the existing vault from backup (or restarting it after a machine reboot)
 
 1. For a brand new vault:
 
-    docker exec -it montagu-vault ./init.sh
-    docker exec -it montagu-vault vault unseal # (multiple times until unsealed)
-    docker exec -it montagu-vault ./first-time-setup.sh
+    ./init/init.sh
+    vault unseal # (multiple times until unsealed)
+    ./init/first-time-setup.sh
 
 2. To recover or restart the vault, run from any host on the VPN
 
