@@ -37,13 +37,14 @@ The tricky bit in this process is getting the ssl certificate private key into t
 
 #### Testing the restore locally
 
-You will need a copy of the vault's (encrypted) storage which can be retrieved by running:
+You will need a copy of the vault's (encrypted) storage which can be retrieved by running, within a fresh checkout of this repository:
 
 ```
 ssh -t support.montagu sudo tar -zcvf  ~/storage.tar.gz -C /montagu/vault storage
 scp support.montagu:storage.tar.gz .
 tar -zxvf storage.tar.gz
 ssh support.montagu rm ~/storage.tar.gz
+rm storage.tar.gz
 ```
 
 Then, in order to simulate access to the vault over https, add the following line to `/etc/hosts`:
