@@ -63,6 +63,9 @@ This repository contains:
     - `teamcity.sh`, which builds and pushes the image, and is run on TeamCity
     - `scripts/entrypoint.sh`. This makes the container wait until we've copied
       across necessary files (like the SSL private key) before starting Vault.
+    - `ssl-key/ssl_private_key.enc`. An encrypted copy of our ssl private key
+    - `scripts/decrypt-ssl-key.sh`.  Script to help decrypt the ssl private key
+    - `ssl-key`. Futher files to support encrypting and decrypting keys for the ssl private key (see the [README.md](ssl-key/README.md) in that directory for further information)
 * Files for spinning up a new container with the correct options:
     - `run.sh`
     - `include/start-text.txt`

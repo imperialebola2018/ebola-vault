@@ -28,7 +28,7 @@ A multi-key approach like [this](https://gist.github.com/kennwhite/9918739) seem
 ## To replace the ssl certificate private key
 
 * Copy the public parts of the certificate into `certs/`
-* Copy the new certificate private key to `~/ssl-key/ssl_private_key`
+* Copy the new certificate private key to `./ssl-key/ssl_private_key`
 * Run the script `./ssl-key/encrypt.sh`
 * Remove `ssl-key/ssl_private_key`
 * Run `git add ssl-key/key ssl-key/ssl_private_key.enc`, then commit and push
