@@ -65,7 +65,6 @@ This repository contains:
       across necessary files (like the SSL private key) before starting Vault.
 * Files for spinning up a new container with the correct options:
     - `run.sh`
-    - `include/start-vault.sh`
     - `include/start-text.txt`
 * Scripts to be run to set up a brand new Vault (we shouldn't need these again)
   unless we suffer a catastrophic backup failure and have to generate new 
