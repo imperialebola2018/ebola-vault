@@ -1,8 +1,9 @@
 # Montagu secrets vault 
-[Vault](https://www.vaultproject.io/) is a piece of softeware for storing 
-secrets. They have an official [docker image](https://hub.docker.com/_/vault/).
+
+[Vault](https://www.vaultproject.io/) is a piece of software for storing secrets. They have an official [docker image](https://hub.docker.com/_/vault/).
 
 ## Using the vault
+
 ### Authenticating against the vault
 1. `export VAULT_ADDR='https://support.montagu.dide.ic.ac.uk:8200'`
 2. `export VAULT_AUTH_GITHUB_TOKEN=<personal access token>`. To generate a 
@@ -11,24 +12,57 @@ secrets. They have an official [docker image](https://hub.docker.com/_/vault/).
 3. `vault auth -method=github`
 
 ### Reading secrets
+
 ```
 vault read secret/some/path
 ```
 
-### Restarting the vault
+### Restarting and/or restoring the vault
+
 If the Vault docker container is stopped (for example, because the support 
-machine is rebooted), follow these steps:
+machine is rebooted, or because you are restoring from backup), follow these steps:
 
 1. Begin a session on the support machine.
 2. Clone this respository: `git clone https://github.com/vimc/montagu-vault.git`
 3. `cd montagu-vault`
-4. `sudo ./run.sh /etc/montagu/vault_ssl_key` (You need root to read the SSL
-   key, not actually to run the vault)
-5. End your remote session.
-6. Collaborate with keyholders to unseal the vault, as described in the next
+4. `./run.sh`
+5. Follow the instructions it prints *on your local machine* to retrieve the key required to unlock the ssl key.
+6. End your remote session.
+7. Collaborate with keyholders to unseal the vault, as described in the next
    section.
 
+The process for restoring the vault from backup is identical.  If you have been following the [Disaster Recovery guide](https://github.com/vimc/montagu/tree/master/docs/DisasterRecovery.md) then the vault volume will be ready to use.
+
+The tricky bit in this process is getting the ssl certificate private key into the vault container.  This is documented in more detail [here](ssl-key/README.md) but if you follow the instructions above things should work.  See the [ssl-key instructions](ssl-key/README.md) if you need to add a new ssh-key or replace the ssl certificate.
+
+#### Testing the restore locally
+
+You will need a copy of the vault's (encrypted) storage which can be retrieved by running, within a fresh checkout of this repository:
+
+```
+ssh -t support.montagu sudo tar -zcvf ~/storage.tar.gz /montagu/vault/storage
+scp support.montagu:storage.tar.gz .
+sudo tar -zxvf storage.tar.gz -C /
+ssh support.montagu rm ~/storage.tar.gz
+rm storage.tar.gz
+```
+
+(Before running those commands you probably want to ensure that `/montagu/vault/storage` is empty or does not exist)
+
+Then, in order to simulate access to the vault over https, add the following line to `/etc/hosts`:
+
+```
+127.0.0.1 support.montagu.dide.ic.ac.uk support
+```
+
+Verify with `ping support.montagu.dide.ic.ac.uk` which should then print `64 bytes from localhost (127.0.0.1): ...`
+
+At this point you can now run `./run.sh` to test the restore process
+
+**Do not forget to remove the line from `/etc/hosts` when you're done**.  Otherwise all sorts of things will fail (registry, future vault access, etc).
+
 ### Unsealing the vault
+
 The vault is stored on disk at `/vault/storage` on the support machine. However,
 it is encrypted on disk. Any time the Vault restarts (or is restored from 
 backup) we have to provide enough unseal keys to allow it to decrypt the 
@@ -42,74 +76,52 @@ Each keyholder up to the required number must run on their machine:
 This shouldn't happen often.
 
 ## Setting up the vault
+
 ### Repository contents
+
 This repository contains:
 
 * Files for extending the base docker image with our own configuration:
     - `Dockerfile`
-    - `vault.conf` (and `vault-no-ssl.conf`)
+    - `vault.conf`
     - `standard.policy`. This grants users of the development team in GitHub
       permissions.
     - `teamcity.sh`, which builds and pushes the image, and is run on TeamCity
     - `scripts/entrypoint.sh`. This makes the container wait until we've copied
       across necessary files (like the SSL private key) before starting Vault.
+    - `ssl-key/ssl_private_key.enc`. An encrypted copy of our ssl private key
+    - `scripts/decrypt-ssl-key.sh`.  Script to help decrypt the ssl private key
+    - `ssl-key`. Futher files to support encrypting and decrypting keys for the ssl private key (see the [README.md](ssl-key/README.md) in that directory for further information)
 * Files for spinning up a new container with the correct options:
-    - `run.sh` (and `run-no-ssl.sh`)
-    - `include/start-vault.sh`
+    - `run.sh`
     - `include/start-text.txt`
 * Scripts to be run to set up a brand new Vault (we shouldn't need these again)
   unless we suffer a catastrophic backup failure and have to generate new 
   secrets):
-    - `scripts/init.sh`
-    - `scripts/first-time-setup.sh`
+    - `init/init.sh`
+    - `init/first-time-setup.sh`
 
-### How to create a brand new Vault
+### How we initially created the vault
+
 Since we hopefully won't do this again, this is more documentation of what 
-Martin did to get us here:
+Martin did to get us here (adapted to use the new ssl key handling)
 
 1. Begin a session on the support machine.
-1. `./run.sh SSL_PRIVATE_KEY_PATH` 
-1. `docker exec -it montagu-vault /bin/sh`
-1. `export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200`. This is
-   because the SSL certificate is signed for that URL, not for 127.0.0.1,
-   which Vault defaults to.
-1. `./init.sh`: This generates four new unseal keys, and one root token.
-   Copy these these onto a USB key as individual files.
+1. Ensure that `/montagu/vault/storage` is empty or does not exist
+1. `./run.sh`
+
+The following commands can then be run from any computer on the VPN
+
+1. export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200
+1. Run `vault init -key-shares=4 -key-threshold=2`: This generates four new unseal keys, and one root token. Copy these these onto a USB key as individual files.
 1. The unseal keys and root token are then distributed to each of the four
    keyholders (Martin, Wes, Alex, Rich), so that each gets one unseal key
     and everyone has the root access token.
-1. Everyone unseals the vault (see below).
-1. `./first-time-setup.sh` (Still inside the vault container).
-
-### Restoring the Vault from backup
-Let's imagine that the support machine has died and we need to set up a new one.
-This is a bit ticklish because we can't secure access to the vault without the 
-private SSL key, but we store this in the vault. It's okay though: We can 
-bootstrap by accessing the vault locally, from inside the Docker container, get
-the key out, and then restart with SSL.
-
-If the support machine hasn't died
-
-1. Follow the restore instructions in the 
-   [Disaster Recovery guide](https://github.com/vimc/montagu/tree/master/docs/DisasterRecovery.md)
-2. `./run-no-ssl.sh`
-3. Each keyholder must unseal the Vault over a localhost connect, like so:
-    1. `ssh support.montagu.dide.ic.ac.uk`
-    2. `./unseal-loopback.sh` (you will be prompted for your unseal key) - at least two people must do this step
-4. With the vault up, but only secure over the loopback devices, restart the vault with ssl enabled using the ssl key is itself stored in the vault
-    1. `ssh support.montagu.dide.ic.ac.uk`
-    2. `./restart-with-ssl.sh`
-5. Finally, go through the normal, remote unseal process, as described in
-   "Unsealing the vault".
-
-Alternative approaches to consider:
-
-1. Don't backup the SSL key, just generate a new one and get a new certificate
-   if the support machines dies. Imperial seem to be able to create them pretty
-   fast.
-2. Backup the SSL key directly with our backup provider.
+1. Everyone unseals the vault using `vault unseal` (see above).
+1. `./init/first-time-setup.sh`
 
 ### Interaction with the registry
+
 In my first take on this I followed the pattern of other Montagu components:
 build a Docker image in TeamCity, push it to the registry, and then `run.sh`
 just pulled the image down and ran it.

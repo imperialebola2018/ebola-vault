@@ -1,6 +1,15 @@
 Vault is now running in montagu-vault container.
-To execute vault CLI commands use: `docker exec -it montagu-vault /bin/sh`
-To initialise new vault run sh in container and then:
-    ./init.sh
-    vault unseal (multiple times until vault is unsealed)
-    ./first-time-setup.sh
+
+The next step depends on if you are starting a brand new vault or restoring
+the existing vault from backup (or restarting it after a machine reboot)
+
+1. For a brand new vault:
+
+    ./init/init.sh
+    vault unseal # (multiple times until unsealed)
+    ./init/first-time-setup.sh
+
+2. To recover or restart the vault, run from any host on the VPN
+
+    export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200
+    vault unseal # multiple times until unsealed
