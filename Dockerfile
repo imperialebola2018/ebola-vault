@@ -1,4 +1,4 @@
-FROM vault:0.7.3
+FROM vault:0.9.1
 RUN apk add --update openssl curl
 
 COPY vault.conf /vault/config/
