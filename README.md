@@ -6,6 +6,10 @@ The code here is a fork of the [vimc project `montagu-vault`](https://github.com
 
 ## Using the vault
 
+### Installing
+
+Get the binary from here: https://www.vaultproject.io/downloads.html
+
 ### Authenticating against the vault
 
 1. `export VAULT_ADDR='https://ebola2017.dide.ic.ac.uk:8200'`
@@ -18,4 +22,14 @@ The code here is a fork of the [vimc project `montagu-vault`](https://github.com
 
 ```
 vault read secret/some/path
+```
+
+### Setup
+
+```
+set -ex
+docker volume create ebola_vault_data
+docker volume create ebola_vault_logs
+./run.sh
+./init/init.sh
 ```

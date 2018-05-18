@@ -3,7 +3,8 @@
 set -e
 
 # To be run to initialise a brand new vault
-vault init \
+export VAULT_ADDR=https://ebola2017.dide.ic.ac.uk:8200
+vault operator init \
       -key-shares=4 \
       -key-threshold=2
 
