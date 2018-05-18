@@ -6,11 +6,11 @@ read -s TOKEN
 
 HERE=$(dirname $0)
 
-vault auth $TOKEN
-vault auth-enable github
+vault login $TOKEN
+vault auth enable github
 vault write auth/github/config organization=imperialebola2018
 vault write auth/github/map/teams/core value=standard
-vault policy-write standard "$HERE/../config/standard.policy"
+vault policy write standard "$HERE/../config/standard.policy"
 
 echo "Enabled GitHub authentication for the core team in the imperialebola2018 organization"
 echo "You can now authenticate against the vault using"

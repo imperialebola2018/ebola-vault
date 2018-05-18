@@ -6,10 +6,10 @@ the existing vault from backup (or restarting it after a machine reboot)
 1. For a brand new vault:
 
     ./init/init.sh
-    vault unseal # (multiple times until unsealed)
+    vault operator unseal # (multiple times until unsealed)
     ./init/first-time-setup.sh
 
 2. To recover or restart the vault, run from any host on the VPN
 
     export VAULT_ADDR=https://ebola2018.dide.ic.ac.uk:8200
-    vault unseal # multiple times until unsealed
+    vault operator unseal # multiple times until unsealed
