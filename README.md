@@ -12,7 +12,7 @@ Get the binary from here: https://www.vaultproject.io/downloads.html
 
 ### Authenticating against the vault
 
-1. `export VAULT_ADDR='https://ebola2017.dide.ic.ac.uk:8200'`
+1. `export VAULT_ADDR='https://ebola2018.dide.ic.ac.uk:8200'`
 2. `export VAULT_AUTH_GITHUB_TOKEN=<personal access token>`. To generate a 
    personal access token, go to GitHub > Settings > Personal Access Tokens. The
    new token must have the 'user' scope.
