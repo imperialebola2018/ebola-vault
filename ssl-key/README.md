@@ -6,7 +6,7 @@ The idea is we:
 
 1. encrypt the private key using a symmetric key
 2. encrypt a copy of that symmetric key using our ssh public keys
-3. the encrypted certificate and the encrypted symmetric keys are added to the montagu repository
+3. the encrypted certificate and the encrypted symmetric keys are added to the repository
 
 Then do decrypt:
 

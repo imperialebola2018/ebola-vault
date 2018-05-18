@@ -1,10 +1,10 @@
-FROM vault:0.9.6
+FROM vault:0.10.1
 RUN apk add --update openssl curl
 
 COPY vault.conf /vault/config/
-COPY certs/support.montagu.crt /vault/config/
+COPY certs/ebola2018_dide_ic_ac_uk.crt /vault/config/
 COPY certs/QuoVadisOVIntermediateCertificate.crt /vault/config/
-RUN cat /vault/config/support.montagu.crt \
+RUN cat /vault/config/ebola2018_dide_ic_ac_uk.crt \
         /vault/config/QuoVadisOVIntermediateCertificate.crt \
         > /vault/config/ssl_certificate
 

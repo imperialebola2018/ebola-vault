@@ -1,4 +1,4 @@
-Vault is now running in montagu-vault container.
+Vault is now running in ebola-vault container.
 
 The next step depends on if you are starting a brand new vault or restoring
 the existing vault from backup (or restarting it after a machine reboot)
@@ -11,5 +11,5 @@ the existing vault from backup (or restarting it after a machine reboot)
 
 2. To recover or restart the vault, run from any host on the VPN
 
-    export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200
+    export VAULT_ADDR=https://ebola2018.dide.ic.ac.uk:8200
     vault unseal # multiple times until unsealed

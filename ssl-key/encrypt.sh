@@ -11,7 +11,7 @@ PATH_KEY=$PATH_SECRET/key
 
 if [ ! -f $FILE_CLEAR ]; then
     echo "Reading ssl key from existing vault"
-    export VAULT_ADDR='https://support.montagu.dide.ic.ac.uk:8200'
+    export VAULT_ADDR='https://ebola2018.dide.ic.ac.uk:8200'
     if [ -z $VAULT_AUTH_GITHUB_TOKEN ]; then
         echo -n "Paste your github token: "
         read -s VAULT_AUTH_GITHUB_TOKEN
