@@ -10,6 +10,12 @@ The code here is a fork of the [vimc project `montagu-vault`](https://github.com
 
 Get the binary from here: https://www.vaultproject.io/downloads.html
 
+### Create a personal access token
+
+1. Go to https://github.com/settings/tokens
+2. Enter a "**Token description**" (e.g., Ebola2017 vault access)
+3. Select "**user** Update all user data"
+
 ### Authenticating against the vault
 
 1. `export VAULT_ADDR='https://ebola2018.dide.ic.ac.uk:8200'`
@@ -17,6 +23,24 @@ Get the binary from here: https://www.vaultproject.io/downloads.html
    personal access token, go to GitHub > Settings > Personal Access Tokens. The
    new token must have the 'user' scope.
 3. `vault auth -method=github`
+
+
+### From R
+
+Add to your "~/.Renviron" file the lines
+
+```
+VAULT_ADDR=https://ebola2018.dide.ic.ac.uk:8200
+VAULT_AUTH_GITHUB_TOKEN=<your token>
+VAULTR_AUTH_METHOD=github
+```
+
+```r
+# install.packages("drat")
+drat:::add("vimc")
+install.packages("vaultr")
+cl <- vaultr::vault_client()
+```
 
 ### Reading secrets
 
