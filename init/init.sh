@@ -7,8 +7,7 @@ vault init \
 
 cat <<EOF
 Copy each of the keys above onto a USB key as individual files and
-distribute one key and the root token to each of Martin, Wes, Alex and
-Rich.
+distribute one key and the root token to each of Rich, Wes, Anne and Tini
 
 After that, at least two people need to unseal the vault.
 
