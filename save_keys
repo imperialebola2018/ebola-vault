@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+export VAULT_ADDR=https://ebola2018.dide.ic.ac.uk:8200
+vault login -method=github
+
+mkdir -p secret
+function cleanup {
+  rm -rf "secret"
+}
+trap cleanup EXIT
+
+docker cp ebola-vault:/vault/config/ssl_certificate secret/ssl_certificate
+docker cp ebola-vault:/vault/config/ssl_private_key secret/ssl_private_key
+
+vault write secret/proxy/ssl_certificate value=@secret/ssl_certificate
+vault write secret/proxy/ssl_private_key value=@secret/ssl_private_key
