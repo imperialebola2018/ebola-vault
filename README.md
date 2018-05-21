@@ -56,4 +56,5 @@ docker volume create ebola_vault_data
 docker volume create ebola_vault_logs
 ./run.sh
 ./init/init.sh
+./save_keys
 ```
