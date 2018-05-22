@@ -13,8 +13,9 @@ Get the binary from here: https://www.vaultproject.io/downloads.html
 ### Create a personal access token
 
 1. Go to https://github.com/settings/tokens
-2. Enter a "**Token description**" (e.g., Ebola2017 vault access)
-3. Select "**user** Update all user data"
+2. Click "**Generate new token**"
+3. Enter a "**Token description**" (e.g., Ebola2018 vault access)
+4. Select "**user** Update all user data"
 
 ### Authenticating against the vault
 
